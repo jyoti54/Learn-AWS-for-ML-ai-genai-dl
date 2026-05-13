@@ -45,7 +45,10 @@ def get_vector_store(docs):
 def get_claude_llm():
     
     ##create the Anthropic Model
-    llm = Bedrock(model_id="anthropic.claude-opus-4-5-20251101-v1:0", client=bedrock,
+    llm = Bedrock(model_id="anthropic.claude-opus-4-5-20251101-v1:0", 
+                  client=bedrock, model_kwargs={"maxTokens":32000}
                   )
+    return llm
+
      
 
