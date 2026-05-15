@@ -48,7 +48,20 @@ def get_vector_store(docs):
     vectorstore_faiss.save_local("faiss_index")
 
 def get_claude_llm():
+    llm = ChatBedrock(
+        model_id="arn:aws:bedrock:us-east-1:499290258898:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0",
+        provider="anthropic",
+        client=bedrock,
+        model_kwargs={
+            "max_tokens": 512,
+            "temperature": 0.5
+        }
+    )
 
+    return llm
+
+
+def get_llama3_llm():   
     llm = ChatBedrock(
         model_id="us.meta.llama3-3-70b-instruct-v1:0",
         provider="meta",
@@ -58,18 +71,7 @@ def get_claude_llm():
             "temperature": 0.5,
             "top_p": 0.9
         }
-    )
-
-    return llm
-
-
-def get_llama3_llm():
-    
-    ## create the llama 3 model
-    llm = ChatBedrock(model_id="arn:aws:bedrock:us-east-1:499290258898:inference-profile/us.meta.llama3-2-1b-instruct-v1:0",
-                  client=bedrock,
-                  model_kwargs={"maxTokens": 512}
-                                )              
+    )           
     return llm
 
 ## Prompt Template
@@ -130,6 +132,7 @@ def main():
                  allow_dangerous_deserialization=True
             )
             llm = get_claude_llm()
+            # llm = get_llama3_llm()
             
             # faiss_index = get_vector_store(docs)
             st.write(get_response_llm(llm, faiss_index, user_question))
